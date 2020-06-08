@@ -44,20 +44,58 @@ class Graph:
             
 
     def dft(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
-        """
-        pass  # TODO
+        #uses a stack
+        start = starting_vertex
+        s = Stack()
+        s.push(starting_vertex)
+
+        visited = set()
+
+        while s.size() > 0:
+
+            #pop current
+            current = s.pop()
+            #add current vertex to visited if it isn't already there
+            if current not in visited:
+                print(current)
+                visited.add(current)
+
+                #add all neighbors to q
+                for vert in self.get_neighbors(current):
+                    s.push(vert)
 
     def dft_recursive(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
+        curr = starting_vertex
+        
 
-        This should be done using recursion.
-        """
-        pass  # TODO
+
+
+
+
+
+
+
+
+
+
+
+
+        # #keep going until no neighbors, then print
+        # curr = starting_vertex
+        # # print('curr', curr)
+        # # print('neighs', self.get_neighbors(curr))
+        # if self.get_neighbors(curr) == set():
+        #     print(curr)
+        #     return
+            
+        # else:
+        #     for vert in self.get_neighbors(curr).copy():
+                
+        #         # print('neighbors', self.get_neighbors(vert))
+        #         removed = self.get_neighbors(curr).pop()
+        #         # print('removed', removed)
+        #         # print('remaining', self.get_neighbors(vert))
+        #         self.dft_recursive(vert)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -127,7 +165,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
-    print(graph.bft(1))
+    # print(graph.bft(1))
 
     '''
     Valid DFT paths:
@@ -137,7 +175,7 @@ if __name__ == '__main__':
         1, 2, 4, 6, 3, 5, 7
     '''
     # graph.dft(1)
-    # graph.dft_recursive(1)
+    graph.dft_recursive(1)
 
     '''
     Valid BFS path:
