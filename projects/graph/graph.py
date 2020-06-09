@@ -3,6 +3,8 @@ Simple graph implementation
 """
 from util import Stack, Queue  # These may come in handy
 
+visited_nodes = []
+
 class Graph:
 
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
@@ -66,62 +68,82 @@ class Graph:
 
     def dft_recursive(self, starting_vertex):
         curr = starting_vertex
-        
+        print(curr)
+        if curr not in visited_nodes:
+            visited_nodes.append(curr)
 
-
-
-
-
-
-
-
-
-
-
-
-
-        # #keep going until no neighbors, then print
-        # curr = starting_vertex
-        # # print('curr', curr)
-        # # print('neighs', self.get_neighbors(curr))
-        # if self.get_neighbors(curr) == set():
-        #     print(curr)
-        #     return
-            
-        # else:
-        #     for vert in self.get_neighbors(curr).copy():
+            for vert in self.get_neighbors(curr):
+                if vert not in visited_nodes:
+                    self.dft_recursive(vert)
                 
-        #         # print('neighbors', self.get_neighbors(vert))
-        #         removed = self.get_neighbors(curr).pop()
-        #         # print('removed', removed)
-        #         # print('remaining', self.get_neighbors(vert))
-        #         self.dft_recursive(vert)
 
     def bfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing the shortest path from
-        starting_vertex to destination_vertex in
-        breath-first order.
-        """
-        pass  # TODO
+        
+        start = starting_vertex
+        q = Queue()
+        q.enqueue([starting_vertex])
+
+        while q.size() > 0:
+            current_path = q.dequeue()
+            if current_path[-1] == destination_vertex:
+                return current_path
+
+            for vert in self.get_neighbors(current_path[-1]):
+                
+                new_path = [*current_path, vert]
+                q.enqueue(new_path)
+                
+
+
+
+
 
     def dfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing a path from
-        starting_vertex to destination_vertex in
-        depth-first order.
-        """
-        pass  # TODO
+        start = starting_vertex
+        s = Stack()
+        s.push([starting_vertex])
+
+        while s.size() > 0:
+            current_path = s.pop()
+            if current_path[-1] == destination_vertex:
+                return current_path
+
+            for vert in self.get_neighbors(current_path[-1]):
+                
+                new_path = [*current_path, vert]
+                s.push(new_path)
+        
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing a path from
-        starting_vertex to destination_vertex in
-        depth-first order.
+        current_path = starting_vertex
+        if type(starting_vertex) == int:
+            current_path = [starting_vertex]
 
-        This should be done using recursion.
-        """
-        pass  # TODO
+        if current_path[-1] == destination_vertex:
+            return current_path
+
+        for vert in self.get_neighbors(current_path[-1]):
+                new_path = [*current_path, vert]
+                self.dfs_recursive(new_path, destination_vertex)
+
+
+    # def dfs_recursive(self, starting_vertex, destination_vertex):
+    #     current_path = starting_vertex
+    #     if type(starting_vertex) == int:
+    #         current_path = [starting_vertex]
+
+    #     print('current_path', current_path)
+    #     if current_path[-1] == destination_vertex:
+    #         print('in if', current_path)
+    #         return current_path
+    #     if current_path[-1] not in visited_nodes:
+    #         visited_nodes.append(current_path[-1])
+
+    #     for vert in self.get_neighbors(current_path[-1]):
+    #         if vert not in visited_nodes:
+    #             new_path = [*current_path, vert]
+    #             self.dfs_recursive(new_path, destination_vertex)
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -175,7 +197,7 @@ if __name__ == '__main__':
         1, 2, 4, 6, 3, 5, 7
     '''
     # graph.dft(1)
-    graph.dft_recursive(1)
+    # print(graph.dft_recursive(1))
 
     '''
     Valid BFS path:
@@ -189,4 +211,4 @@ if __name__ == '__main__':
         [1, 2, 4, 7, 6]
     '''
     # print(graph.dfs(1, 6))
-    # print(graph.dfs_recursive(1, 6))
+    print(graph.dfs_recursive(1, 6))
