@@ -148,37 +148,21 @@ class Graph:
     #             self.dfs_recursive(new_path, destination_vertex)
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
-        # start = starting_vertex
-        # s = Stack()
-        # s.push([starting_vertex])
+        path = [starting_vertex]
+        visited = []
+        def explore(path, end, vis):
+            if path[-1] not in vis:
+                vis.append(path[-1])
 
-        # while s.size() > 0:
-        #     current_path = s.pop()
-        #     if current_path[-1] == destination_vertex:
-        #         return current_path
+                print('path', path)
+                if path[-1] == end:
+                    return path
 
-        #     for vert in self.get_neighbors(current_path[-1]):
-                
-        #         new_path = [*current_path, vert]
-        #         s.push(new_path)
+                for n in self.get_neighbors(path[-1]):
+                    new_path = [*path, n]
+                    return explore(new_path, end, vis)
 
-
-        current_path = starting_vertex
-
-        if type(starting_vertex) == int:
-            current_path = [starting_vertex]
-
-        if destination_vertex not in current_path:
-            if current_path[-1] == destination_vertex:
-                return current_path
-            print('current_path', current_path)
-            for vert in self.get_neighbors(current_path[-1]):
-                
-                new_path = [*current_path, vert]
-                return self.dfs_recursive(new_path, destination_vertex)
-
-        return current_path
-
+        return explore(path, destination_vertex, visited)
 
         
        
