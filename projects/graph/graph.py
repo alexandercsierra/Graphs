@@ -116,98 +116,33 @@ class Graph:
 
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
-        current_path = starting_vertex
-        if type(starting_vertex) == int:
-            current_path = [starting_vertex]
-
-        visited_nodes.append(current_path[-1])
-        if current_path[-1] == destination_vertex:
-            return current_path
-        for vert in self.get_neighbors(current_path[-1]):
-            if vert not in visited_nodes:
-                new_path = [*current_path, vert]
-                visited_nodes.append(vert)
-                current_path = self.dfs_recursive(new_path, destination_vertex)
-        return current_path
-    # def dfs_recursive(self, starting_vertex, destination_vertex):
-        # start = starting_vertex
-        # s = Stack()
-        # s.push([starting_vertex])
-
-        # while s.size() > 0:
-        #     current_path = s.pop()
-        #     if current_path[-1] == destination_vertex:
-        #         return current_path
-
-        #     for vert in self.get_neighbors(current_path[-1]):
-                
-        #         new_path = [*current_path, vert]
-        #         s.push(new_path)
 
 
-        # current_path = starting_vertex
-
-        # if type(starting_vertex) == int:
-        #     current_path = [starting_vertex]
-
-        # if destination_vertex not in current_path:
-        #     if current_path[-1] == destination_vertex:
-        #         return current_path
-        #     print('current_path', current_path)
-        #     for vert in self.get_neighbors(current_path[-1]):
-                
-        #         new_path = [*current_path, vert]
-        #         return self.dfs_recursive(new_path, destination_vertex)
-
-        # return current_path
-
-    # def dfs_recursive(self, starting_vertex, destination_vertex):
-    #     path = [starting_vertex]
-    #     visited = set()
-
-    #     def inner_dfs(path, dest, visited):
-    #         if dest in path:
-    #             return path
-    #         if path[-1] not in visited:
-    #             visited.add(path[-1])
-    #             for vert in self.get_neighbors(path[-1]):
-    #                 new_path = [*path, vert]
-    #                 path = inner_dfs(new_path, dest, visited)
-    #     return path
-
-    #     return inner_dfs(path, destination_vertex, visited)
-       
-
-    #    explore(node, visited = none)
-    #     if visited is None:
-    #         visited = set()
-
-    #     #visited logic
-
-    #     #if found: return path
-
-    #     for neighbor in node neighbors:
-    #         return explore(neighbor, visited, copy of path)
-
-        # def explore(node, visited=None, path=None):
-
-        #     print('path', path)
-        #     if visited is None:
-        #         visited = set()
-
-        #     if path is None:
-        #         path = []
+        def loop1(n):
+            while n>0:
+                print(n)
+                n-=1
             
-        #     if destination_vertex in path:
-        #         return path
-        #     else: 
-        #         if node not in visited:
-        #             visited.add(node)
-        #             for neighbor in self.get_neighbors(node):
-        #                     path.append(node)
-        #                     explore(neighbor, visited, path)
+        loop(5)
 
-        # explore(starting_vertex)
+        def loop2(n):
+            if n < 1:
+                return n
+            print(n)
+            loop2(n-1)
+
+        #define stopping condition
+            #return result
+
+        #do the work
+        #recursively call the function
+
+
+
+
+        loop2(5)
+        
+
 
 
 if __name__ == '__main__':
