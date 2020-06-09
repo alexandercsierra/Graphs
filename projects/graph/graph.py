@@ -115,38 +115,6 @@ class Graph:
         
 
 
-    # def dfs_recursive(self, starting_vertex, destination_vertex):
-    #     current_path = starting_vertex
-    #     if type(starting_vertex) == int:
-    #         current_path = [starting_vertex]
-
-    #     if current_path[-1] == destination_vertex:
-    #         return current_path
-
-    #     for vert in self.get_neighbors(current_path[-1]):
-    #             new_path = [*current_path, vert]
-    #             self.dfs_recursive(new_path, destination_vertex)
-
-
-    # def dfs_recursive(self, starting_vertex, destination_vertex):
-    #     current_path = starting_vertex
-    #     if type(starting_vertex) == int:
-    #         current_path = [starting_vertex]
-
-    #     # if current_path[-1] not in visited_nodes:
-    #     visited_nodes.append(current_path[-1])
-    #     print('current_path', current_path)
-    #     if current_path[-1] == destination_vertex:
-    #         print('in if', current_path)
-    #         return current_path
-    #     print('neighbors', self.get_neighbors(current_path[-1]))
-    #     for vert in self.get_neighbors(current_path[-1]):
-    #         print('vert', vert)
-    #         if vert not in visited_nodes:
-    #             new_path = [*current_path, vert]
-    #             visited_nodes.append(vert)
-    #             self.dfs_recursive(new_path, destination_vertex)
-
     def dfs_recursive(self, starting_vertex, destination_vertex):
         path = [starting_vertex]
         visited = []
@@ -162,12 +130,33 @@ class Graph:
                     new_path = [*path, n]
                     return explore(new_path, end, vis)
 
+
+        def loop1(n):
+            while n>0:
+                print(n)
+                n-=1
+            
+        loop(5)
+
+        def loop2(n):
+            if n < 1:
+                return n
+            print(n)
+            loop2(n-1)
+
+        #define stopping condition
+            #return result
+
+        #do the work
+        #recursively call the function
+
+
+
         return explore(path, destination_vertex, visited)
 
+        loop2(5)
         
-       
 
-        
 
 
 if __name__ == '__main__':
