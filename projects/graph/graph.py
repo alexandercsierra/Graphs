@@ -114,17 +114,18 @@ class Graph:
                 s.push(new_path)
         
 
-    def dfs_recursive(self, starting_vertex, destination_vertex):
-        current_path = starting_vertex
-        if type(starting_vertex) == int:
-            current_path = [starting_vertex]
 
-        if current_path[-1] == destination_vertex:
-            return current_path
+    # def dfs_recursive(self, starting_vertex, destination_vertex):
+    #     current_path = starting_vertex
+    #     if type(starting_vertex) == int:
+    #         current_path = [starting_vertex]
 
-        for vert in self.get_neighbors(current_path[-1]):
-                new_path = [*current_path, vert]
-                self.dfs_recursive(new_path, destination_vertex)
+    #     if current_path[-1] == destination_vertex:
+    #         return current_path
+
+    #     for vert in self.get_neighbors(current_path[-1]):
+    #             new_path = [*current_path, vert]
+    #             self.dfs_recursive(new_path, destination_vertex)
 
 
     # def dfs_recursive(self, starting_vertex, destination_vertex):
@@ -132,17 +133,57 @@ class Graph:
     #     if type(starting_vertex) == int:
     #         current_path = [starting_vertex]
 
+    #     # if current_path[-1] not in visited_nodes:
+    #     visited_nodes.append(current_path[-1])
     #     print('current_path', current_path)
     #     if current_path[-1] == destination_vertex:
     #         print('in if', current_path)
     #         return current_path
-    #     if current_path[-1] not in visited_nodes:
-    #         visited_nodes.append(current_path[-1])
-
+    #     print('neighbors', self.get_neighbors(current_path[-1]))
     #     for vert in self.get_neighbors(current_path[-1]):
+    #         print('vert', vert)
     #         if vert not in visited_nodes:
     #             new_path = [*current_path, vert]
+    #             visited_nodes.append(vert)
     #             self.dfs_recursive(new_path, destination_vertex)
+
+    def dfs_recursive(self, starting_vertex, destination_vertex):
+        # start = starting_vertex
+        # s = Stack()
+        # s.push([starting_vertex])
+
+        # while s.size() > 0:
+        #     current_path = s.pop()
+        #     if current_path[-1] == destination_vertex:
+        #         return current_path
+
+        #     for vert in self.get_neighbors(current_path[-1]):
+                
+        #         new_path = [*current_path, vert]
+        #         s.push(new_path)
+
+
+        current_path = starting_vertex
+
+        if type(starting_vertex) == int:
+            current_path = [starting_vertex]
+
+        if destination_vertex not in current_path:
+            if current_path[-1] == destination_vertex:
+                return current_path
+            print('current_path', current_path)
+            for vert in self.get_neighbors(current_path[-1]):
+                
+                new_path = [*current_path, vert]
+                return self.dfs_recursive(new_path, destination_vertex)
+
+        return current_path
+
+
+        
+       
+
+        
 
 
 if __name__ == '__main__':
