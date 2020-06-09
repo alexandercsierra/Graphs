@@ -42,6 +42,7 @@ class Graph:
         return visited
         
 def earliest_ancestor(ancestors, start):
+    #create a graph with ancestor relationships as edges
     g = Graph()
     for anc in ancestors:
         if anc[0] not in g.vertices:
@@ -52,22 +53,26 @@ def earliest_ancestor(ancestors, start):
 
         g.add_edge(anc[1], anc[0])
 
-
+    #do a depth first traversal, which returns the entire graph with Nones where there was a dead end
     parents = g.dft(start)
     indexes = []
+    #loop through parents backwards if there is a pattern of None number None number, those were tied for path length. If they Nones are more spread out, then they were not of equal length. Save the indexes of the numbers at the end of the longest path(s) in indexes
     for i in range(len(parents)-1, -1, -1):
         if parents[i] == None:
             indexes.append(i-1)
+    #initialize an array to hold the oldest ancestors, beginning with the first
     ends = [parents[indexes[0]]]
     for i in range(len(indexes)-1):
 
-
+        #if the differences of the indexes is 2, the lengths are equal, add to ends array
         if indexes[i+1] - indexes[i] == -2:
             ends.append(parents[indexes[i+1]])
-
+    #grab the minimum number, as instructed if there is more than one
     result = min(ends)
+    #if this number is the same as the starting number, there was no ancestor, so return -1
     if result == start:
         return -1
+    #otherwise return oldest ancestor
     else:
         return result
 
