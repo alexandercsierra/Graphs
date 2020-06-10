@@ -50,7 +50,7 @@ class SocialGraph:
     def get_friends(self, user_id):
         return self.friendships[user_id]
 
-    def bft(self, user_id):
+    def bft(self, user_id, head):
         #uses a queue
         start = user_id
         q = Queue()
@@ -58,26 +58,26 @@ class SocialGraph:
 
         visited = set()
         # visited.add(start)
-        current = None
-        counter = 0
+        paths = []
         while q.size() > 0:
             #deq current
             current = q.dequeue()
-            if counter < 1:
-                print('counter', counter)
-                if current[-1] == start and len(current) > 1:
-                    counter+=1
-                #add current vertex to visited if it isn't already there
-                if current[-1] not in visited:
-                    print('current friend', current[-1])
-                    print('current', current)
-                    visited.add(current[-1])
+            #add current vertex to visited if it isn't already there
+            if current[-1] not in visited:
+                # print('current friend', current[-1])
+                # print('current', current)
+                paths.append(current)
+                visited.add(current[-1])
 
-                    #add all neighbors to q
-                    for vert in self.get_friends(current[-1]):
+                #add all neighbors to q
+                for vert in self.get_friends(current[-1]):
+                    # print('vert', vert)
+                    if vert != head:
                         new_path = [*current, vert]
                         q.enqueue(new_path)
-        return current
+
+        # print('returned path', paths)
+        return paths
 
 
 
@@ -121,32 +121,91 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
+        visited = {user_id: [user_id]}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
 
         #each key is a friend and each value is the path to that friend
 
         friendships = self.friendships[user_id]
-        # print('friendships', friendships)
+        paths_list = []
 
-        for friend in friendships:
-            print('friend', friend)
-            # print(self.bft(friend))
-            path = self.bft(friend)
-        #     print('path', path)
-            if user_id not in path:
-                print('path in the if', path)
-                visited[path[-1]] = path
+        if len(friendships) > 0:
+            for friend in friendships:
+                # print('friend', friend)
+                # print(self.bft(friend))
+                # paths[friend] = self.bft(friend, user_id)
+
+                path = self.bft(friend, user_id)
+                paths_list += path
+
+            for path in paths_list:
+                last_num = path[-1]
+
+                if last_num not in visited:
+                    visited[last_num] = [user_id, *path]
+                else:
+                    if len(path) < len(visited[last_num])-1:
+                        visited[last_num] = [user_id, *path]
+            
+        
 
 
 
-        print('visited', visited)
         return visited
 
 
+'''
+
+{1: {8, 10, 5}, 2: {10, 5, 7}, 3: {4}, 4: {9, 3}, 5: {8, 1, 2}, 6: {10}, 7: {2}, 8: {1, 5}, 9: {4}, 10: {1, 2, 6}}
+
+
+
+{1: [1], 8: [1, 8], 10: [1, 10], 5: [1, 5], 2: [1, 10, 2], 6: [1, 10, 6], 7: [1, 10, 2, 7]}
+'''
+
 if __name__ == '__main__':
     sg = SocialGraph()
-    print(sg.populate_graph(10, 2))
-    print(sg.friendships)
+    sg.populate_graph(10, 2)
+    print('friendships', sg.friendships)
     connections = sg.get_all_social_paths(1)
-    # print(connections)
+    print('connections', connections)
+    print("\n")
+
+    g = SocialGraph()
+    g.add_user(1)
+    g.add_user(2)
+    g.add_user(3)
+    g.add_user(4)
+    g.add_user(5)
+    g.add_user(6)
+    g.add_user(7)
+    g.add_user(8)
+    g.add_user(9)
+    g.add_user(10)
+
+    g.add_friendship(1,8)
+    g.add_friendship(1,10)
+    g.add_friendship(1,5)
+    g.add_friendship(2,10)
+    g.add_friendship(2,5)
+    g.add_friendship(2,7)
+    g.add_friendship(3,4)
+    g.add_friendship(4,9)
+    g.add_friendship(5,8)
+    g.add_friendship(6,10)
+
+    print('friendships', g.friendships)
+    print('connections', g.get_all_social_paths(1))
+
+
+
+'''
+
+{1: {8, 10, 5}, 2: {10, 5, 7}, 3: {4}, 4: {9, 3}, 5: {8, 1, 2}, 6: {10}, 7: {2}, 8: {1, 5}, 9: {4}, 10: {1, 2, 6}}
+
+
+
+{1: [1], 8: [1, 8], 10: [1, 10], 5: [1, 5], 2: [1, 10, 2], 6: [1, 10, 6], 7: [1, 10, 2, 7]}
+'''
+
+    
