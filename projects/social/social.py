@@ -152,6 +152,13 @@ class SocialGraph:
 
 
         return visited
+    
+    def get_avg_connections(self, friends, master_list):
+        total = set()
+        keys = list(friends.keys())
+        for i in range(1, len(keys)):
+            total.add(keys[i])
+        return len(total)/len(master_list)
 
 
 '''
@@ -169,6 +176,8 @@ if __name__ == '__main__':
     print('friendships', sg.friendships)
     connections = sg.get_all_social_paths(1)
     print('connections', connections)
+    sgavg = sg.get_avg_connections(connections, sg.users)
+    print('sgavg', sgavg)
     print("\n")
 
     g = SocialGraph()
@@ -195,7 +204,11 @@ if __name__ == '__main__':
     g.add_friendship(6,10)
 
     print('friendships', g.friendships)
-    print('connections', g.get_all_social_paths(1))
+    connections = g.get_all_social_paths(1)
+    print('connections', connections)
+
+    avg = g.get_avg_connections(connections, g.users)
+    print('avg', avg)
 
 
 
