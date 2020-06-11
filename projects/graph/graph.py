@@ -116,45 +116,23 @@ class Graph:
 
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
-        path = [starting_vertex]
-        visited = []
-        def explore(path, end, vis):
-            if path[-1] not in vis:
-                vis.append(path[-1])
+        current_path = starting_vertex
+        if type(starting_vertex) == int:
+            current_path = [starting_vertex]
 
-                print('path', path)
-                if path[-1] == end:
-                    return path
+        visited_nodes.append(current_path[-1])
+        print('last node', current_path[-1])
+        if current_path[-1] == destination_vertex:
+            print('in if', current_path)
+            return current_path
 
-                for n in self.get_neighbors(path[-1]):
-                    new_path = [*path, n]
-                    return explore(new_path, end, vis)
-
-
-        def loop1(n):
-            while n>0:
-                print(n)
-                n-=1
-            
-        loop(5)
-
-        def loop2(n):
-            if n < 1:
-                return n
-            print(n)
-            loop2(n-1)
-
-        #define stopping condition
-            #return result
-
-        #do the work
-        #recursively call the function
-
-
-
-        return explore(path, destination_vertex, visited)
-
-        loop2(5)
+        print(self.get_neighbors(current_path[-1]))
+        for vert in self.get_neighbors(current_path[-1]):
+            if vert not in visited_nodes:
+                new_path = [*current_path, vert]
+                print('new_path', new_path)
+                if self.dfs_recursive(new_path, destination_vertex) != None: 
+                    return self.dfs_recursive(new_path, destination_vertex)
         
 
 

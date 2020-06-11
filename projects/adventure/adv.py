@@ -32,7 +32,7 @@ def dft(starting_vertex, directions):
         #uses a stack
         start = starting_vertex
         s = []
-        s.append(starting_vertex)
+        s.append([starting_vertex][])
         visited = set()
         directions = {}
 
@@ -44,21 +44,23 @@ def dft(starting_vertex, directions):
                 visited.add(current)
                 #add all neighbors to q
                 neighbors = get_neighbors(dirs[current])
-                for direction in neighbors:
-                    if neighbors[direction] != '?':
-                        directions[current] = ([direction,neighbors[direction]])
-                        s.append(neighbors[direction])
-        return directions
+                for neighbor in neighbors:
+                    print('neighbors', neighbor)
+                    avail_path = dirs[neighbor]
+                    print('path', avail_path)
+
+
+
+        # print('visited', visited)
+        return visited
 
 
 def get_neighbors(directions):
-    result = {}
-    print(directions)
-    card_dirs = {'n':'?', 'e':'?', 'w':'?', 's':'?'}
+    result = []
+    # print(directions)
     for letter in directions:
-        # result[letter] = directions[letter]
-        print('letter', letter)
-    print('result', result)
+        result.append(directions[letter])
+    # print('result', result)
     return result
 
 
@@ -85,39 +87,26 @@ player = Player(world.starting_room)
 
 
 
-
-
-
-
-# Fill this out with directions to walk
-# traversal_path = ['n', 'n']
+#########################################################################
 traversal_path = []
 
-#here add directions to path
-# print('room_graph', room_graph)
 dirs = {}
 for room in room_graph:
-    # print('room', room)
-    # print('directions', room_graph[room][1])
-    dirs[room] = room_graph[room][1]
-# print('dirs', dirs)
-# get_neighbors(dirs[0])
+    direction_dict = room_graph[room][1]
+    if 'n' not in direction_dict:
+        direction_dict['n'] = '?'
+    if 's' not in direction_dict:
+        direction_dict['s'] = '?'
+    if 'e' not in direction_dict:
+        direction_dict['e'] = '?'
+    if 'w' not in direction_dict:
+        direction_dict['w'] = '?'
+    dirs[room] = direction_dict
+
 paths = dft(list(room_graph.keys())[0], dirs)
-# print('paths', paths)
+# print('dirs', dirs)
+#########################################################################
 
-paths_visited = []
-
-for path in paths:
-    # if paths[path][1] not in paths_visited:
-    # print('path', path)
-    traversal_path.append(paths[path][0])
-    paths_visited.append(path)
-
-# while paths_visited <    
-
-# print('traversal', traversal_path)
-# print('paths_visited', paths_visited)
-print('length', len(room_graph))
 
 
 
