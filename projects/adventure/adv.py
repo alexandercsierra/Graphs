@@ -79,7 +79,6 @@ def dft(starting_vertex, dirs):
 
             neighbors = get_neighbors(current, dirs)
             for vert in neighbors:
-                print('vert', vert)
                 if vert != "?":
                     #dont append if already visited?
                     s.append(vert)
@@ -125,7 +124,7 @@ world = World()
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -172,7 +171,9 @@ player.current_room = world.starting_room
 visited_rooms.add(player.current_room)
 
 for move in traversal_path:
+    # print('move', move)
     player.travel(move)
+    # print('current_room', player.current_room)
     visited_rooms.add(player.current_room)
   
 
@@ -181,6 +182,9 @@ if len(visited_rooms) == len(room_graph):
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
     print(f"{len(room_graph) - len(visited_rooms)} unvisited rooms")
+    print(f"{len(room_graph)} total rooms")
+    print(f"{len(traversal_path)} moves")
+    print('visited_rooms', visited_rooms)
 
 
 
