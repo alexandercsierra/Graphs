@@ -4,64 +4,115 @@ from world import World
 
 import random
 from ast import literal_eval
+from util import Stack, Queue
 
-# def dft(starting_vertex, directions):
-#         #uses a stack
-#         start = starting_vertex
-#         s = []
-#         s.append(starting_vertex)
-#         print('directions', directions)
-#         visited = set()
-#         directions = {}
-#         while len(s) > 0:
 
-#             current = s.pop()
-#             if current not in visited:
-#                 # print('current', current)
-#                 visited.add(current)
-#                 #add all neighbors to q
-#                 neighbors = get_neighbors(dirs[current])
-#                 print('neighbors', neighbors)
-#                 for direction in neighbors:
-#                     if neighbors[direction] != '?':
-#                         directions[current] = ([direction,neighbors[direction]])
-#                         s.append(neighbors[direction])
-#         return directions
 
-def dft(starting_vertex, directions):
-        #uses a stack
+
+
+def get_neighbors(directions, dirs):
+    dirs_dict = dirs[directions]
+    neighbors = list(dirs_dict.values())
+    return neighbors
+
+def get_opp_direction(direction):
+    if direction == 'n':
+        return 's'
+    elif direction == 's':
+        return 'n'
+    elif direction == 'e':
+        return 'w'
+    elif direction == 'w':
+        return 'e'
+    else:
+        return None
+
+
+def get_final_path(rooms, dirs):
+    final_list= []
+    for i in range(len(rooms)-1):
+        cardinals = list(dirs[rooms[i]].keys())
+        room_names = list(dirs[rooms[i]].values())
+
+        # print(rooms[i], 'to', rooms[i+1])
+        if rooms[i+1] in room_names:
+            index = room_names.index(rooms[i+1])
+            card = cardinals[index]
+            # print('direction', card)
+            final_list.append(rooms[i])
+        else:
+            connection = find_path(rooms[i], rooms[i+1], dirs)
+            final_list += connection
+        i+=1
+    return final_list
+
+def find_path(starting_vertex, destination_vertex, dirs):
+        
         start = starting_vertex
-        s = []
-        s.append([starting_vertex][])
-        visited = set()
-        directions = {}
+        q = Queue()
+        q.enqueue([starting_vertex])
 
-        while len(s) > 0:
+        while q.size() > 0:
+            current_path = q.dequeue()
+            if current_path[-1] == destination_vertex:
+                return current_path
 
-            current = s.pop()
-            if current not in visited:
-                # print('current', current)
-                visited.add(current)
-                #add all neighbors to q
-                neighbors = get_neighbors(dirs[current])
-                for neighbor in neighbors:
-                    print('neighbors', neighbor)
-                    avail_path = dirs[neighbor]
-                    print('path', avail_path)
+            for vert in get_neighbors(current_path[-1], dirs):
+                if vert != "?":
+                    new_path = [*current_path, vert]
+                    q.enqueue(new_path)
+    
+
+def dft(starting_vertex, dirs):
+    start = starting_vertex 
+    s = []
+    s.append(starting_vertex)
+
+    visited = set()
+    visited_list = []
+    while len(s) > 0:
+
+        current = s.pop()
+        visited_list.append(current)
+        if current not in visited:
+            visited.add(current)
+
+            neighbors = get_neighbors(current, dirs)
+            for vert in neighbors:
+                print('vert', vert)
+                if vert != "?":
+                    #dont append if already visited?
+                    s.append(vert)
+
+    # print('visited_list', visited_list)
+    return visited_list
+
+def get_directions(path, dirs):
+
+    directions = []
+    for i in range(len(path)-1):
+        cardinals = list(dirs[path[i]].keys())
+        room_names = list(dirs[path[i]].values())
+
+        index = room_names.index(path[i+1])
+        card = cardinals[index]
+        directions.append(card)
+
+    return directions
 
 
 
-        # print('visited', visited)
-        return visited
+def traverse_maze(entrance, dirs):
+    rooms = dft(entrance, dirs)
+    path = get_final_path(rooms, dirs)
 
+    path_no_dupes = []
+    for i in range(len(path)-1):
+        if path[i] != path[i+1]:
+            path_no_dupes.append(path[i])
 
-def get_neighbors(directions):
-    result = []
-    # print(directions)
-    for letter in directions:
-        result.append(directions[letter])
-    # print('result', result)
-    return result
+    traversal_directions = get_directions(path_no_dupes, dirs)
+    return traversal_directions
 
 
 
@@ -71,7 +122,7 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
@@ -103,7 +154,10 @@ for room in room_graph:
         direction_dict['w'] = '?'
     dirs[room] = direction_dict
 
-paths = dft(list(room_graph.keys())[0], dirs)
+
+paths = traverse_maze(list(room_graph.keys())[0], dirs)
+traversal_path = paths
+# print('returning', paths)
 # print('dirs', dirs)
 #########################################################################
 
@@ -143,3 +197,20 @@ else:
 #         break
 #     else:
 #         print("I did not understand that command.")
+
+
+
+'''
+Pick a neighbor
+create a stack for that neighbor
+create a master directions list
+traverse until all directions are ? except already visited nodes, adding each direction to the master list
+at this point should have a stack of nodes and directions [[None, 0],[n,1],[n,2]]
+pop off stack adding opposite direction to a list of directions
+when the stack is empty, we have reached the starting node, mark the opposite of the last direction in the master list as ?. Ex: None 0, n,1 , n,2, s,1, s,0  - mark the north direction of 0 as complete by changing it to a ?
+when only question marks remain on the starting node, we have explored every room.
+
+
+'''
+
+
